@@ -1644,7 +1644,7 @@ def convert_and_load_state_dict_in_model(
 
             if future_or_tensor is None:
                 param_device = get_device(device_map, renamed_key, valid_torch_device=True)
-                if needs_quantization or mapping.quantization_operation is not None:
+                if needs_quantization:
                     param_device = "cpu"
                 future_or_tensor = spawn_materialize(thread_pool, tensor, param_device, _dtype)
 
@@ -1669,6 +1669,13 @@ def convert_and_load_state_dict_in_model(
                 for target_name, param in realized_value.items():
                     param = param[0] if isinstance(param, list) else param
                     param_device = get_device(device_map, target_name)
+                    try:
+                        if hasattr(param, "to"):
+                            param = param.to(param_device)
+                    except Exception as e:
+                        loading_info.error_msgs.append(
+                            f"Failed to move {target_name} to {param_device}: {e}"
+                        )
                     # Offloading support
                     if param_device == "disk" and (target_name not in model_buffers or offload_buffers):
                         disk_offload_index = offload_and_maybe_resave_param(
