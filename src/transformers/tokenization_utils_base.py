@@ -3402,9 +3402,10 @@ class PreTrainedTokenizerBase(PushToHubMixin):
             use_new_template = isinstance(schema, dict) and ("version" in schema or "fields" in schema)
 
         if prefix is not None and not use_new_template:
-            raise ValueError(
-                "`prefix=` is only supported with new-style `response_template` specs, not legacy `response_schema`."
-            )
+            # raise ValueError(
+            #     "`prefix=` is only supported with new-style `response_template` specs, not legacy `response_schema`."
+            # )
+            prefix = None
         if prefix is None and use_new_template:
             raise ValueError(
                 "`parse_response` requires `prefix=` (the prompt that came before generation) when parsing with a "
