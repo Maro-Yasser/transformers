@@ -268,13 +268,13 @@ class ModelManager:
 
         from transformers.models.auto.modeling_auto import MODEL_FOR_MULTIMODAL_LM_MAPPING_NAMES
 
-        if config.model_type in MODEL_FOR_MULTIMODAL_LM_MAPPING_NAMES:
-            from transformers import AutoModelForMultimodalLM
+        from transformers import AutoModelForMultimodalLM
 
-            return AutoModelForMultimodalLM.from_pretrained(model_id, **model_kwargs)
+        return AutoModelForMultimodalLM.from_pretrained(model_id, **model_kwargs)
+        # if config.model_type in MODEL_FOR_MULTIMODAL_LM_MAPPING_NAMES:
 
-        architecture = getattr(transformers, config.architectures[0])
-        return architecture.from_pretrained(model_id, **model_kwargs)
+        # architecture = getattr(transformers, config.architectures[0])
+        # return architecture.from_pretrained(model_id, **model_kwargs)
 
     def load_model_and_processor(
         self,
