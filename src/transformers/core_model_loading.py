@@ -1644,7 +1644,7 @@ def convert_and_load_state_dict_in_model(
 
             if future_or_tensor is None:
                 param_device = get_device(device_map, renamed_key, valid_torch_device=True)
-                if mapping.quantization_operation is not None:
+                if needs_quantization or mapping.quantization_operation is not None:
                     param_device = "cpu"
                 future_or_tensor = spawn_materialize(thread_pool, tensor, param_device, _dtype)
 
